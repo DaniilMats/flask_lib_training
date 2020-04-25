@@ -126,7 +126,7 @@ def delete_book(book_id) -> str:
     filtered_data: list = list(filter(lambda x: x.get('id') == book_id, books))
     if not filtered_data:
         error_msg: dict = {'error': "Нет книги с таким номером"}
-        return Response(json.dumps(error_msg), 400, mimetype='application/json')
+        return Response(json.dumps(error_msg), 404, mimetype='application/json')
     books.remove(filtered_data[0])
     return Response("OK", 204, mimetype='application/json')
 

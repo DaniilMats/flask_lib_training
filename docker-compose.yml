@@ -4,3 +4,6 @@ services:
     build: .
     image: library_flask
     entrypoint: python3 app.py
+    ports:
+      - "5000"
+    restart: on-failure

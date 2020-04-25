@@ -130,5 +130,6 @@ def delete_book(book_id) -> str:
     books.remove(filtered_data[0])
     return Response("OK", 200, mimetype='application/json')
 
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)

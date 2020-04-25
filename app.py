@@ -122,4 +122,4 @@ def update_field_of_book_by_id(book_id) -> str:
 
 
 if __name__ == '__main__':
-    app.run(port=5000)
+    app.run(host='0.0.0.0', port=5000)

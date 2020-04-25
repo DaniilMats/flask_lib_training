@@ -121,5 +121,14 @@ def update_field_of_book_by_id(book_id) -> str:
     return response
 
 
+@app.route('/books/<int:book_id>', methods=['DELETE'])
+def delete_book(book_id) -> str:
+    filtered_data: list = list(filter(lambda x: x.get('id') == book_id, books))
+    if not filtered_data:
+        error_msg: dict = {'error': "Нет книги с таким номером"}
+        return Response(json.dumps(error_msg), 400, mimetype='application/json')
+    books.remove(filtered_data[0])
+    return Response("OK", 200, mimetype='application/json')
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)

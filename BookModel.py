@@ -1,5 +1,8 @@
-from settings import db
+from flask_sqlalchemy import SQLAlchemy
+from settings import app
 import json
+
+db: SQLAlchemy = SQLAlchemy(app)
 
 
 class Book(db.Model):
@@ -69,3 +72,6 @@ class Book(db.Model):
             'id': self.id
         }
         return json.dumps(book)
+
+
+db.create_all()

@@ -1,19 +1,7 @@
-from flask import Flask, jsonify, request, Response
+from flask import jsonify, request, Response
+from BookModel import *
 from settings import app
 import json
-
-books: list = [
-    {
-        'author': 'daniil',
-        'book_name': 'flask_edu',
-        'id': 1
-    },
-    {
-        'author': 'dan',
-        'book_name': 'edu_flask',
-        'id': 2
-    }
-]
 
 
 class BookInfoValidator:
@@ -64,11 +52,9 @@ class BookInfoValidatorForPatch(BookInfoValidator):
 
 def find_and_update(code: int, book_info: dict, book_id: int = None) -> Response:
     if code == 204:
-        book_to_replace: dict = list(filter(lambda x: x.get('id') == book_id, books))[0]
-        index: int = books.index(book_to_replace)
-        books[index].update(book_info)
+        Book.update_book(book_id, book_info)
     else:
-        books.append(book_info)
+        Book.add_book(book_info)
     response = Response('OK', code, mimetype='application/json')
     response.headers['Location'] = f'/books/{book_info.get("id")}'
     return response
@@ -76,7 +62,7 @@ def find_and_update(code: int, book_info: dict, book_id: int = None) -> Response
 
 @app.route('/books')
 def get_books() -> str:
-    response: str = jsonify({'books': books})
+    response: str = jsonify({'books': Book.get_all_books()})
     return response
 
 
@@ -106,7 +92,7 @@ def update_whole_book_by_id(book_id: int):
 
 @app.route('/books/<int:book_id>')
 def get_books_by_id(book_id) -> str:
-    return jsonify(list(filter(lambda x: x.get('id') == book_id, books))[0])
+    return jsonify(Book.get_book_by_id(book_id))
 
 
 @app.route('/books/<int:book_id>', methods=['PATCH'])
@@ -123,11 +109,10 @@ def update_field_of_book_by_id(book_id) -> str:
 
 @app.route('/books/<int:book_id>', methods=['DELETE'])
 def delete_book(book_id) -> str:
-    filtered_data: list = list(filter(lambda x: x.get('id') == book_id, books))
-    if not filtered_data:
+    if not Book.get_book_by_id(book_id):
         error_msg: dict = {'error': "Нет книги с таким номером"}
         return Response(json.dumps(error_msg), 404, mimetype='application/json')
-    books.remove(filtered_data[0])
+    Book.delete_book(book_id)
     return Response("OK", 204, mimetype='application/json')
 
 

@@ -5,8 +5,26 @@ import json
 
 db = SQLAlchemy(app)
 
+
 class Book(db.Model):
     __tablename__: str = 'books'
     author = db.Column(db.String(80),  nullable=False)
     book_name = db.Column(db.String(80), nullable=False)
     id = db.Column(db.Integer, primary_key=True)
+
+    def add_book(_author, _book_name, _id):
+        new_book = Book(author=_author, book_name=_book_name, id=_id)
+        db.session.add(new_book)
+        db.session.commit()
+
+    def get_all_books():
+        return Book.query.all()
+
+    def __repr__(self):
+        book: dict = {
+            'author': self.author,
+            'book_name': self.book_name,
+            'id': self.id
+        }
+        return json.dumps(book)
+

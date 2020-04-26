@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, request, Response
-from settings import *
+from settings import app
 import json
 
 books: list = [

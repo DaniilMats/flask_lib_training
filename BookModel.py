@@ -20,6 +20,9 @@ class Book(db.Model):
     def get_all_books():
         return Book.query.all()
 
+    def get_book_by_id(_id):
+        return Book.query.filter_by(id=_id).first()
+
     def __repr__(self):
         book: dict = {
             'author': self.author,
